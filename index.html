@@ -1,0 +1,145 @@
+<html>
+<head>
+    <title>Croissant Manager</title>
+    <script src="https://cdn.firebase.com/js/client/2.1.0/firebase.js"></script>
+    <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script>
+    <link rel="stylesheet" href="main.css"/>
+</head>
+<body>
+
+<h2>Croissant Manager</h2>
+<div class="right">
+	<a href="#" id="login">Sign in With Twitter</a>
+	<div id="stats">
+		<div id="stat-header">Order Stats</div>
+	</div>
+</div>
+
+<div id="form">
+	<h3>Choose a Croissant</h3>
+	<select id="croissant-types">
+	</select>
+	<button id="order">Place Order</button>
+</div>
+<div id="orders">
+	<h2>Your Orders</h2>
+</div>
+
+<script>
+
+//STEP 1 Define Firebase References
+var ref = new Firebase("https://croissants.firebaseio.com/");
+var ordersRef = ref.child('orders');
+var usersRef = ref.child('users');
+var croissantsRef = ref.child('croissants');
+var currentUser = null;
+
+//Populate dropdown and stats list
+
+var list = $('#croissant-types');
+
+croissantsRef.once('value', function (snapshot) {
+	var croissants = snapshot.val();
+	for (var type in croissants) {
+		list.append($('<option></option>').val(type).html(type));
+		$('<div id="' + type + '">' + type + ' <span id="' + type + '-count"></span></div>').appendTo($('#stats'));
+		var count = croissants[type].count;
+
+		//add order count to stats on initial load
+		$('#' + type + '-count').text(count);
+	}
+});
+
+//Log users in
+$('#login').on('click', function() {
+	authenticate();
+});
+
+var authenticate = function() {
+	usersRef.authWithOAuthPopup('twitter', function(error, user) {
+		if (error) {
+			console.log(error);
+		} else if (user) {
+			usersRef.child(user.uid).set({username: user.twitter.username, pic: user.twitter.cachedUserProfile.profile_image_url_https, budget: 20});
+			currentUser = user;
+		}
+	});
+}
+
+usersRef.onAuth(function (user) {
+	currentUser = user;
+	//Show orders in realtime for the current user
+	var userId = currentUser.uid;
+	ordersRef.orderByChild("user").equalTo(userId).on("child_added", function (snap) {
+		var order = snap.val();
+		$('<div>' + order.type + '</div>').appendTo($('#orders'));
+	});
+});
+
+//Load initial counts
+croissantsRef.once('value', function (snap) {
+	var croissant = snap.val();
+	for (var key in croissant) {
+		$('#' + key + '-count').text(croissant[key].count);
+	}
+});
+
+//Add a croissant order
+$('#order').on('click', function(e) {
+	var type = $('#croissant-types option:selected').text();
+	console.log(type);
+
+	//get the price and compare the budget
+	var availableBudget, price;
+	usersRef.child(currentUser.uid).child('budget').once('value', function (snapshot) {
+		availableBudget = snapshot.val();
+		croissantsRef.child(type).child('price').once('value', function (priceSnap) {
+			price = priceSnap.val();
+			if (availableBudget > price) {
+
+				//update the budget
+				usersRef.child(currentUser.uid).child('budget').set(availableBudget - price);
+
+				//add the order
+				ordersRef.push({
+					type: type,
+					time: new Date().getTime(),
+					user: currentUser.uid
+				});
+
+				//update the count in Firebase and in the DOM
+				croissantsRef.child(type).child('count').transaction(function (currentVal) {
+					return (currentVal || 0) + 1;
+				});
+			} else {
+				console.log("You're out of budget!");
+			}
+		});
+
+	});
+});
+
+//Watch for new orders
+croissantsRef.on('child_changed', function (snap) {
+	var count = snap.val().count;
+	var type = snap.key();
+	$('#' + type + '-count').text(count);
+});
+
+
+
+// //Add pictures to order stats
+// ordersRef.on('child_added', function (snapshot) {
+// 	var order = snapshot.val();
+// 	var user = usersRef.child(order.user);
+// 	console.log(user);
+// 	user.once('value', function(snap) {
+// 		var pic = snap.val().pic;
+// 		$('<img src="' + pic + '"/>').appendTo($('#' + order.type));
+// 	});
+// });
+
+</script>
+</body>
+
+</html>

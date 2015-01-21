@@ -1,0 +1,9 @@
+{
+  "firebase": "croissants",
+  "public": ".",
+  "ignore": [
+    "firebase.json",
+    "**/.*",
+    "**/node_modules/**"
+  ]
+}

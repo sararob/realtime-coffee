@@ -1,0 +1,41 @@
+.right {
+	float: right;
+}
+
+#stats {
+	border: 1px solid black;
+	padding: 10px;
+	border-radius: 4px;
+	margin: 30px 60px 30px 30px;
+}
+
+#stat-header {
+	font-size: 20px;
+	margin-bottom: 15px;
+}
+
+#login {
+	padding: 0.5em 1em;
+	background-color: lightblue;
+	border: none;
+	color: black;
+	font-weight: normal;
+	text-decoration: none;
+	border-radius: 5px;
+	font-size: 18px;
+	/*margin: -3px 40px 0px 0px;*/
+}
+
+@font-face {
+  font-family: 'Gotham Light';
+  src: url("/fonts/Gotham-Light.otf") format("opentype");
+}
+
+@font-face {
+  font-family: 'Gotham Bold';
+  src: url("/fonts/Gotham-Bold.otf") format("opentype");
+}
+
+body {
+	font-family: 'Gotham Light';
+}
