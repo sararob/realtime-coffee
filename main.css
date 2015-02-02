@@ -1,31 +1,3 @@
-.right {
-	float: right;
-}
-
-#stats {
-	border: 1px solid black;
-	padding: 10px;
-	border-radius: 4px;
-	margin: 30px 60px 30px 30px;
-}
-
-#stat-header {
-	font-size: 20px;
-	margin-bottom: 15px;
-}
-
-#login {
-	padding: 0.5em 1em;
-	background-color: lightblue;
-	border: none;
-	color: black;
-	font-weight: normal;
-	text-decoration: none;
-	border-radius: 5px;
-	font-size: 18px;
-	/*margin: -3px 40px 0px 0px;*/
-}
-
 @font-face {
   font-family: 'Gotham Light';
   src: url("/fonts/Gotham-Light.otf") format("opentype");
@@ -38,4 +10,130 @@
 
 body {
 	font-family: 'Gotham Light';
+}
+
+#logo {
+	margin-left: 250px;
+}
+
+.header {
+	text-align: center;
+}
+
+.header img {
+	width: 170px;
+}
+
+.item-img {
+	width: 100px;
+}
+
+.header h2 {
+	margin-right: 30px;
+}
+
+#drink-options {
+	text-align: center;
+}
+
+.option {
+	display: inline-block;
+	margin: 20px;
+	width: 150px;
+	padding: 10px;
+	border: 1px solid black;
+	border-radius: 10px;
+	padding-bottom: 20px;
+	cursor: pointer;
+}
+
+.price {
+	margin-top: 10px;
+}
+
+.selected {
+	background-color: lightblue;
+}
+
+.option:visited {
+	background-color: blue;
+}
+
+#order-button {
+	text-align: center;
+}
+
+#orders {
+}
+
+#stats {
+
+}
+
+#orders, #stats {
+	border: 1px solid black;
+	border-radius: 4px;
+	padding: 20px;
+	height: 300px;
+	width: 200px;
+}
+
+.order-header {
+	font-size: 20px;
+	margin-bottom: 15px;
+}
+
+#login {
+	float: right;
+	display: inline-block;
+}
+
+#login, #order {
+	padding: 0.5em 1em;
+	background-color: lightblue;
+	border: none;
+	color: black;
+	font-weight: normal;
+	text-decoration: none;
+	border-radius: 5px;
+	font-size: 18px;
+	cursor: pointer;
+	/*margin: -3px 40px 0px 0px;*/
+}
+
+.no-budget {
+	color: red;
+}
+
+#budget {
+	padding: 5px;
+}
+
+.left {
+	float: left;
+	margin-left: 300px;
+}
+
+.right {
+	float: right;
+	margin-right: 300px;
+}
+
+.container-bottom {
+	margin-top: 50px;
+	padding-top: 100px;
+	border-top: 1px solid black;
+}
+
+.order-list-img {
+	width: 38px;
+}
+
+.count {
+	float: right;
+	margin-right: 20px;
+}
+
+.count-row {
+	margin-bottom: 8px;
 }
