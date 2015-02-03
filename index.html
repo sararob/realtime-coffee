@@ -38,7 +38,7 @@
 	</body>
 	<script>
 
-//STEP 1 Define Firebase References
+//Define Firebase References
 var ref = new Firebase("https://realtimecoffee.firebaseio.com/");
 var ordersRef = ref.child('orders');
 var usersRef = ref.child('users');
@@ -79,7 +79,7 @@ var authenticate = function() {
 	});
 };
 
-
+//Update user's orders and set budget
 usersRef.onAuth(function (user) {
 	currentUser = user;
 
@@ -93,7 +93,7 @@ usersRef.onAuth(function (user) {
 			$('<img class="order-list-img" src="images/' + order.type + '.png"/>').appendTo($('#orders'));
 		});
 
-		//update the budget
+		//set the budget
 		usersRef.child(userId).once('value', function (snap) {
 			var budget = snap.val().budget;
 			$('<div id="budget">Your Budget: &euro;<span id="remaining">' + budget + '</span></div>').appendTo($('#login'));
@@ -105,10 +105,7 @@ usersRef.onAuth(function (user) {
 });
 
 
-//colors: https://color.adobe.com/CS04-color-theme-1994456/
-
-
-//watch for selected drinks
+//highlight selected drink
 
 $('#drink-options').on('click', 'li', function (e) {
 	$('.option').removeClass('selected');
@@ -120,7 +117,7 @@ $('#drink-options').on('click', 'li', function (e) {
 $('#order').on('click', function(e) {
 	var type = $('#drink-options li.selected')[0].id;
 
-	//get the price and compare the budget
+	//get the price and see if it's within the budget
 	var availableBudget, price;
 	usersRef.child(currentUser.uid).child('budget').once('value', function (snapshot) {
 		availableBudget = snapshot.val();
